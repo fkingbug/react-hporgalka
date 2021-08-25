@@ -202,3 +202,35 @@ function App() {
   );
 }
 ```
+
+---
+
+Удаление постов
+
+- Передаем эту функцию до PostItem и
+- onClick={() => props.remove(props.post)
+
+```javascript
+const removePost = (post) => {
+  setPosts(posts.filter((p) => p.id !== post.id));
+};
+```
+
+---
+
+Условная отрисовка
+
+- если не пустой массив то выводи список
+- если пустой напиши текс "Посты не найдены"
+
+```javascript
+{
+  posts.length ? (
+    <PostList remove={removePost} posts={posts} title="Список постов 1" />
+  ) : (
+    <h1 style={{ textAlign: 'center' }}>Посты не найдены</h1>
+  );
+}
+```
+
+---
