@@ -30,14 +30,14 @@ app.js :
 Myinput компонент :
 
 ```javascript
-import React from 'react';
-import classes from './MyInput.module.css';
+import React from 'react'
+import classes from './MyInput.module.css'
 
-const MyInput = (props) => {
-  return <input className={classes.myInput} {...props} />;
-};
+const MyInput = props => {
+  return <input className={classes.myInput} {...props} />
+}
 
-export default MyInput;
+export default MyInput
 ```
 
 ---
@@ -51,14 +51,14 @@ export default MyInput;
 - на onChange повесить функцию которая будет помещать в в стейт значение инпута
 
 ```javascript
-const [title, setTitle] = useState('');
+const [title, setTitle] = useState('')
 
-<MyInput
+;<MyInput
   value={title}
-  onChange={(e) => setTitle(e.target.value)}
+  onChange={e => setTitle(e.target.value)}
   type="text"
   placeholder="Название поста"
-/>;
+/>
 ```
 
 ---
@@ -77,7 +77,7 @@ const bodyInputRef = useRef()
 обращеник ref :
 
 ```javascript
-console.log(bodyInputRef.current.value);
+console.log(bodyInputRef.current.value)
 ```
 
 MyInput передача ref :
@@ -85,14 +85,14 @@ MyInput передача ref :
 - оборачиваем компонент в React.forwardRef и параметром передаем ref
 
 ```javascript
-import React from 'react';
-import classes from './MyInput.module.css';
+import React from 'react'
+import classes from './MyInput.module.css'
 
 const MyInput = React.forwardRef((props, ref) => {
-  return <input ref={ref} className={classes.myInput} {...props} />;
-});
+  return <input ref={ref} className={classes.myInput} {...props} />
+})
 
-export default MyInput;
+export default MyInput
 ```
 
 Передача в компонент ref :
@@ -115,35 +115,35 @@ function App() {
     { id: 1, title: 'Javascript', body: 'Description' },
     { id: 3, title: 'Javascript 3', body: 'Description' },
     { id: 2, title: 'Javascript 2', body: 'Description' },
-  ]);
+  ])
 
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+  const [title, setTitle] = useState('')
+  const [body, setBody] = useState('')
 
-  const addNewPost = (e) => {
-    e.preventDefault();
+  const addNewPost = e => {
+    e.preventDefault()
     const newPost = {
       id: Date.now(),
       title,
       body,
-    };
-    setPosts([...posts, newPost]);
-    setTitle('');
-    setBody('');
-  };
+    }
+    setPosts([...posts, newPost])
+    setTitle('')
+    setBody('')
+  }
 
   return (
     <div className="App">
       <form>
         <MyInput
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={e => setTitle(e.target.value)}
           type="text"
           placeholder="Название поста"
         />
         <MyInput
           value={body}
-          onChange={(e) => setBody(e.target.value)}
+          onChange={e => setBody(e.target.value)}
           type="text"
           placeholder="Описание поста"
         />
@@ -151,7 +151,7 @@ function App() {
       </form>
       <PostList posts={posts} title="Список постов 1" />
     </div>
-  );
+  )
 }
 ```
 
@@ -170,28 +170,28 @@ function App() {
     { id: 1, title: 'Javascript', body: 'Description' },
     { id: 3, title: 'Javascript 3', body: 'Description' },
     { id: 2, title: 'Javascript 2', body: 'Description' },
-  ]);
+  ])
 
-  const [post, setPost] = useState({ title: '', body: '' });
+  const [post, setPost] = useState({ title: '', body: '' })
 
-  const addNewPost = (e) => {
-    e.preventDefault();
-    setPosts([...posts, { ...post, id: Date.now() }]);
-    setPost({ title: '', body: '' });
-  };
+  const addNewPost = e => {
+    e.preventDefault()
+    setPosts([...posts, { ...post, id: Date.now() }])
+    setPost({ title: '', body: '' })
+  }
 
   return (
     <div className="App">
       <form>
         <MyInput
           value={post.title}
-          onChange={(e) => setPost({ ...post, title: e.target.value })}
+          onChange={e => setPost({ ...post, title: e.target.value })}
           type="text"
           placeholder="Название поста"
         />
         <MyInput
           value={post.body}
-          onChange={(e) => setPost({ ...post, body: e.target.value })}
+          onChange={e => setPost({ ...post, body: e.target.value })}
           type="text"
           placeholder="Описание поста"
         />
@@ -199,7 +199,7 @@ function App() {
       </form>
       <PostList posts={posts} title="Список постов 1" />
     </div>
-  );
+  )
 }
 ```
 
@@ -211,9 +211,9 @@ function App() {
 - onClick={() => props.remove(props.post)
 
 ```javascript
-const removePost = (post) => {
-  setPosts(posts.filter((p) => p.id !== post.id));
-};
+const removePost = post => {
+  setPosts(posts.filter(p => p.id !== post.id))
+}
 ```
 
 ---
@@ -229,8 +229,82 @@ const removePost = (post) => {
     <PostList remove={removePost} posts={posts} title="Список постов 1" />
   ) : (
     <h1 style={{ textAlign: 'center' }}>Посты не найдены</h1>
-  );
+  )
 }
 ```
 
 ---
+
+Поиск в инпуте :
+
+- sortedPosts Смотрит изменились ли посты и фильтр постов и если да и метод сортировки выбран то делай сортировку иначе верни посты
+- sortedAndSearchedPosts смотрит за изменениями в велью инпута и функции выше , если что то есть то с помощью метода filter сделай сортровку по имени постов
+- Post лист передается результат фунеции sortedAndSearchedPosts и поверяется тоже по нему
+
+```javascript
+function App() {
+  const [posts, setPosts] = useState([
+    { id: 1, title: 'aa', body: 'cc' },
+    { id: 3, title: 'bb', body: 'bb' },
+    { id: 2, title: 'cc', body: 'aa' },
+  ])
+  const [selectedSort, setSelectedSort] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const sortedPosts = useMemo(() => {
+    console.log('Мемо сработало')
+    if (selectedSort) {
+      return [...posts].sort((a, b) => a[selectedSort].localeCompare(b[selectedSort]))
+    }
+    return posts
+  }, [selectedSort, posts])
+
+  const sortedAndSearchedPosts = useMemo(() => {
+    return sortedPosts.filter(post => post.title.toLowerCase().includes(searchQuery))
+  }, [searchQuery, sortedPosts])
+
+  const createPost = newPost => {
+    setPosts([...posts, newPost])
+  }
+
+  const removePost = post => {
+    setPosts(posts.filter(p => p.id !== post.id))
+  }
+
+  const sortPosts = sort => {
+    setSelectedSort(sort)
+  }
+
+  return (
+    <div className="App">
+      <PostForm create={createPost} />
+      <hr style={{ margin: '15px 0' }} />
+      <div>
+        <MyInput
+          placeholder="Поиск..."
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+        />
+        <Myselect
+          value={selectedSort}
+          onChange={sortPosts}
+          defaultValue="Сортировка"
+          options={[
+            { value: 'title', name: 'По названию' },
+            { value: 'body', name: 'По описанию' },
+          ]}
+        />
+      </div>
+      {sortedAndSearchedPosts.length ? (
+        <PostList
+          remove={removePost}
+          posts={sortedAndSearchedPosts}
+          title="Список постов 1"
+        />
+      ) : (
+        <h1 style={{ textAlign: 'center' }}>Посты не найдены</h1>
+      )}
+    </div>
+  )
+}
+```

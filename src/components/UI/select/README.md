@@ -9,18 +9,18 @@
 ```javascript
 function MySelect({ options, defaultValue, value, onChange }) {
   return (
-    <select value={value} onChange={(event) => onChange(event.target.value)}>
+    <select value={value} onChange={event => onChange(event.target.value)}>
       <option disabled value="">
         {defaultValue}
       </option>
       {options &&
-        options.map((option) => (
+        options.map(option => (
           <option key={option.value} value={option.value}>
             {option.name}
           </option>
         ))}
     </select>
-  );
+  )
 }
 ```
 
@@ -33,12 +33,12 @@ App.js
 - Вызов компонента с всеми нужными данными
 
 ```javascript
-const [selectedSort, setSelectedSort] = useState('');
-const sortPosts = (sort) => {
-  setSelectedSort(sort);
+const [selectedSort, setSelectedSort] = useState('')
+const sortPosts = sort => {
+  setSelectedSort(sort)
   //массив постов ↓
-  setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])));
-};
+  setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])))
+}
 return (
   <Myselect
     value={selectedSort}
@@ -49,5 +49,7 @@ return (
       { value: 'body', name: 'По описанию' },
     ]}
   />
-);
+)
 ```
+
+---

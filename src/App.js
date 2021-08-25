@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import PostList from './components/posts/PostList'
 import PostForm from './components/PostForm'
 import Myselect from './components/UI/select/MySelect'
@@ -14,13 +14,17 @@ function App() {
   const [selectedSort, setSelectedSort] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
 
-  function getSortedPosts() {
+  const sortedPosts = useMemo(() => {
+    console.log('Мемо сработало')
     if (selectedSort) {
       return [...posts].sort((a, b) => a[selectedSort].localeCompare(b[selectedSort]))
     }
     return posts
-  }
-  const sortedPosts = getSortedPosts()
+  }, [selectedSort, posts])
+
+  const sortedAndSearchedPosts = useMemo(() => {
+    return sortedPosts.filter(post => post.title.toLowerCase().includes(searchQuery))
+  }, [searchQuery, sortedPosts])
 
   const createPost = newPost => {
     setPosts([...posts, newPost])
@@ -54,8 +58,12 @@ function App() {
           ]}
         />
       </div>
-      {posts.length ? (
-        <PostList remove={removePost} posts={sortedPosts} title="Список постов 1" />
+      {sortedAndSearchedPosts.length ? (
+        <PostList
+          remove={removePost}
+          posts={sortedAndSearchedPosts}
+          title="Список постов 1"
+        />
       ) : (
         <h1 style={{ textAlign: 'center' }}>Посты не найдены</h1>
       )}
