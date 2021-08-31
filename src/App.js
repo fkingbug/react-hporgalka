@@ -1,15 +1,16 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
+
 import PostList from './components/posts/PostList'
 import PostForm from './components/PostForm'
-
-import './styles/App.css'
 import PostFilter from './components/PostFilter'
 import MyModal from './components/UI/MyModal/MyModal'
 import MyButton from './components/UI/button/MyButton'
 import { usePosts } from './hooks/usePosts'
 
+import './styles/App.css'
+
 function App() {
-  const [posts, setPosts] = useState([]])
+  const [posts, setPosts] = useState([])
 
   const [filter, setFilter] = useState({ sort: '', query: '' })
   const [modal, setModal] = useState(false)
